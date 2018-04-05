@@ -1,4 +1,4 @@
-package com.gu.play.secretrotation.core
+package com.gu.play.secretrotation
 
 import java.time.Clock
 import java.time.Clock.systemUTC

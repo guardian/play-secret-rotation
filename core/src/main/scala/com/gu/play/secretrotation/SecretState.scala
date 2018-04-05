@@ -1,4 +1,4 @@
-package com.gu.play.secretrotation.core
+package com.gu.play.secretrotation
 
 import java.time.Clock.systemUTC
 import java.time.{Clock, Duration}
@@ -28,7 +28,7 @@ sealed trait SecretState {
     secretAndSuccessfulDecodes.headOption.map {
       case (secret, decodedValue) =>
         if (secret != activeSecret) {
-          Logger.info("Accepted decode with non-active key : "+description)
+          Logger.info(s"Accepted decode with non-active key : $description")
         }
         decodedValue
     }

@@ -5,7 +5,7 @@ import java.util.function.Supplier
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClient
 import com.amazonaws.services.simplesystemsmanagement.model.{DescribeParametersRequest, GetParametersRequest, ParameterMetadata, ParameterStringFilter}
 import com.github.blemale.scaffeine.{LoadingCache, Scaffeine}
-import com.gu.play.secretrotation.core._
+import com.gu.play.secretrotation.{InitialSecret, SecretState, TransitionTiming, TransitioningSecret}
 import play.api.http.SecretConfiguration
 
 import scala.collection.JavaConverters._

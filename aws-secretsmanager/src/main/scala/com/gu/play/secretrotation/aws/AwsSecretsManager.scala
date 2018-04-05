@@ -5,7 +5,7 @@ import java.util.function.Supplier
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClient
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest
 import com.github.blemale.scaffeine.{LoadingCache, Scaffeine}
-import com.gu.play.secretrotation.core._
+import com.gu.play.secretrotation.{SecretState, TransitionTiming, TransitioningSecret}
 import play.api.http.SecretConfiguration
 
 import scala.concurrent.duration._
