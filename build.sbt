@@ -17,15 +17,17 @@ lazy val core =
     )
   )
 
+val awsSdkVersion = "1.11.310"
+
 lazy val `aws-parameterstore` = project.settings(baseSettings: _*).dependsOn(core).settings(
   libraryDependencies ++= Seq(
-    "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.309"
+    "com.amazonaws" % "aws-java-sdk-ssm" % awsSdkVersion
   )
 )
 
 lazy val `aws-secretsmanager` = project.settings(baseSettings: _*).dependsOn(core).settings(
   libraryDependencies ++= Seq(
-    "com.amazonaws" % "aws-java-sdk-secretsmanager" % "1.11.309"
+    "com.amazonaws" % "aws-java-sdk-secretsmanager" % awsSdkVersion
   )
 )
 

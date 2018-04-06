@@ -2,7 +2,7 @@ package com.gu.play.secretrotation.aws
 
 import java.util.function.Supplier
 
-import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClient
+import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.model.{DescribeParametersRequest, GetParametersRequest, ParameterMetadata, ParameterStringFilter}
 import com.github.blemale.scaffeine.{LoadingCache, Scaffeine}
 import com.gu.play.secretrotation.{InitialSecret, SecretState, TransitionTiming, TransitioningSecret}
@@ -17,7 +17,7 @@ object AwsParameterStore {
   class SecretSupplier(
     transitionTiming: TransitionTiming,
     parameterName: String,
-    ssmClient: AWSSimpleSystemsManagementClient
+    ssmClient: AWSSimpleSystemsManagement
   ) extends Supplier[SecretState] {
 
     // make sure we don't cache the secret state too long, we need to be ready to use a new secret when issued

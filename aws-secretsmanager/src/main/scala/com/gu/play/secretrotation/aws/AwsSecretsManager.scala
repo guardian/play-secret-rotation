@@ -2,7 +2,7 @@ package com.gu.play.secretrotation.aws
 
 import java.util.function.Supplier
 
-import com.amazonaws.services.secretsmanager.AWSSecretsManagerClient
+import com.amazonaws.services.secretsmanager.AWSSecretsManager
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest
 import com.github.blemale.scaffeine.{LoadingCache, Scaffeine}
 import com.gu.play.secretrotation.{SecretState, TransitionTiming, TransitioningSecret}
@@ -17,7 +17,7 @@ object AwsSecretStore {
   class SecretSupplier(
     transitionTiming: TransitionTiming,
     secretId: String,
-    secretsManagerClient: AWSSecretsManagerClient
+    secretsManagerClient: AWSSecretsManager
   ) extends Supplier[SecretState] {
 
     // make sure we don't cache the secret state too long, we need to be ready to use a new secret when issued
