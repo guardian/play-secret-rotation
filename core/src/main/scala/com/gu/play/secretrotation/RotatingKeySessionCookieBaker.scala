@@ -7,15 +7,18 @@ import java.util.function.Supplier
 import play.api.http.{SecretConfiguration, _}
 import play.api.mvc._
 import play.api.mvc.request.{DefaultRequestFactory, RequestFactory}
+import play.api.{BuiltInComponentsFromContext, Configuration}
 
 
-trait RotatingSecretComponents {
-  val httpConfiguration: HttpConfiguration
+trait RotatingSecretComponents extends BuiltInComponentsFromContext {
 
-  val secretRotationSupplier: Supplier[SecretState]
+  val secretStateSupplier: Supplier[SecretState]
 
-  lazy val requestFactory: RequestFactory =
-    RotatingSecretComponents.requestFactoryFor(secretRotationSupplier, httpConfiguration)
+  override def configuration: Configuration = super.configuration ++
+    Configuration("play.http.secret.key" -> secretStateSupplier.get().activeSecret.secret)
+
+  override lazy val requestFactory: RequestFactory =
+    RotatingSecretComponents.requestFactoryFor(secretStateSupplier, httpConfiguration)
 }
 
 object RotatingSecretComponents {
