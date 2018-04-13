@@ -42,12 +42,13 @@ object ParameterStoreLambda extends App {
       val metadata = ssmClient.describeParameters(describeSecretParameterRequest).getParameters.get(0)
 
       val kmsKeyId = metadata.getKeyId
-
+      
       val putParameterResult =
         ssmClient.putParameter(new PutParameterRequest()
           .withName(parameterName)
           .withOverwrite(true)
           .withKeyId(kmsKeyId)
+          .withType(metadata.getType)
           .withValue(generateSecret)
         )
       println(s"Updated secret, put parameter version ${putParameterResult.getVersion}")
