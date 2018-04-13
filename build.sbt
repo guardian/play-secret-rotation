@@ -17,22 +17,23 @@ lazy val core =
     )
   )
 
-val awsSdkVersion = "1.11.310"
+val awsSdkVersion = "1.11.313"
 
-lazy val `aws-parameterstore` = project.settings(baseSettings: _*).dependsOn(core).settings(
-  libraryDependencies ++= Seq(
-    "com.amazonaws" % "aws-java-sdk-ssm" % awsSdkVersion
-  )
+val awsSsm = "com.amazonaws" % "aws-java-sdk-ssm" % awsSdkVersion
+
+lazy val `aws-parameterstore` = project.in(file("aws-parameterstore/state-supplier")).settings(baseSettings: _*).dependsOn(core).settings(
+  libraryDependencies += awsSsm
 )
 
-lazy val `aws-secretsmanager` = project.settings(baseSettings: _*).dependsOn(core).settings(
-  libraryDependencies ++= Seq(
-    "com.amazonaws" % "aws-java-sdk-secretsmanager" % awsSdkVersion
-  )
+lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambda"))
+  .settings(baseSettings: _*).dependsOn(`secret-generator`).settings(
+  libraryDependencies += awsSsm
 )
 
+lazy val `secret-generator` = project.settings(baseSettings: _*)
 
-lazy val `play-secret-rotation-root` = (project in file(".")).aggregate(core, `aws-parameterstore`, `aws-secretsmanager`).
+lazy val `play-secret-rotation-root` = (project in file("."))
+  .aggregate(core, `aws-parameterstore`, `aws-parameterstore-lambda`).
   settings(baseSettings: _*).settings(
   publishArtifact := false,
   publish := {},
@@ -54,4 +55,9 @@ lazy val `play-secret-rotation-root` = (project in file(".")).aggregate(core, `a
   )
 )
 
-
+assemblyMergeStrategy in assembly := {
+  {
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case x => MergeStrategy.first
+  }
+}

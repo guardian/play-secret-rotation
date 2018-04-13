@@ -11,7 +11,7 @@ import play.api.http.SecretConfiguration
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 
-object AwsParameterStore {
+object ParameterStore {
   val InitialVersion = 1
 
   class SecretSupplier(
