@@ -6,6 +6,7 @@ import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.model.{DescribeParametersRequest, GetParametersRequest, ParameterMetadata, ParameterStringFilter}
 import com.github.blemale.scaffeine.{LoadingCache, Scaffeine}
 import com.gu.play.secretrotation.{InitialSecret, SecretState, TransitionTiming, TransitioningSecret}
+import play.api.Logger
 import play.api.http.SecretConfiguration
 
 import scala.collection.JavaConverters._
@@ -32,7 +33,7 @@ object ParameterStore {
       val metadata = fetchParameterMetadata()
       val latestVersion = metadata.getVersion.toLong
 
-      latestVersion match {
+      val state = latestVersion match {
         case InitialVersion => InitialSecret(fetchSecretsByVersion(InitialVersion)(InitialVersion))
         case _ =>
           val previousVersion = latestVersion - 1
@@ -44,6 +45,8 @@ object ParameterStore {
               transitionTiming.overlapIntervalForSecretPublishedAt(metadata.getLastModifiedDate.toInstant)
           )
       }
+      Logger.info(s"Fetched Secret state: ${state.description}")
+      state
     }
 
     private def fetchParameterMetadata(): ParameterMetadata = {

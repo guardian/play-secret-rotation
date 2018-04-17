@@ -7,6 +7,8 @@ import org.threeten.extra.Interval
 import play.api.Logger
 import play.api.http.SecretConfiguration
 
+import scala.math.Ordering.Implicits._
+
 sealed trait SecretState {
   def acceptedSecrets: Stream[SecretConfiguration]
 
@@ -14,25 +16,7 @@ sealed trait SecretState {
 
   def description: String
 
-  /**
-    * Want to know:
-    * If decoding was successful, but with a legacy secret (especially if we are towards the end of the overlap period)
-    */
-  def decode[T](decodingFunc: SecretConfiguration => T, successfulDecode: T => Boolean): Option[T] = {
-    val secretAndSuccessfulDecodes: Stream[(SecretConfiguration, T)] = for {
-      secret <- acceptedSecrets
-      decodedValue = decodingFunc(secret)
-      if successfulDecode(decodedValue)
-    } yield secret -> decodedValue
-
-    secretAndSuccessfulDecodes.headOption.map {
-      case (secret, decodedValue) =>
-        if (secret != activeSecret) {
-          Logger.info(s"Accepted decode with non-active key : $description")
-        }
-        decodedValue
-    }
-  }
+  def decode[T](decodingFunc: SecretConfiguration => T, successfulDecode: T => Boolean): Option[T]
 }
 
 case class InitialSecret(secret: SecretConfiguration) extends SecretState {
@@ -41,6 +25,9 @@ case class InitialSecret(secret: SecretConfiguration) extends SecretState {
   override val activeSecret = secret
 
   val description = "Initial secret, no upcoming rotation of secret"
+
+  override def decode[T](decodingFunc: SecretConfiguration => T, successfulDecode: T => Boolean): Option[T] =
+    Some(decodingFunc(secret)).filter(successfulDecode)
 }
 
 case class TransitioningSecret(
@@ -51,6 +38,8 @@ case class TransitioningSecret(
 
   def isOldSecretAccepted = clock.instant.isBefore(overlapInterval.getEnd)
   def isNewSecretActive = clock.instant.isAfter(overlapInterval.getStart)
+
+  val warningThreshold = overlapInterval.getStart.plus(overlapInterval.toDuration.dividedBy(3).multipliedBy(2))
 
   def acceptedSecrets: Stream[SecretConfiguration] =
     Stream(oldSecret).filter(_ => isOldSecretAccepted) :+ newSecret
@@ -70,4 +59,26 @@ case class TransitioningSecret(
     }
   }
 
+  /**
+    * Want to know:
+    * If decoding was successful, but with a legacy secret (especially if we are towards the end of the overlap period)
+    */
+  override def decode[T](decodingFunc: SecretConfiguration => T, successfulDecode: T => Boolean): Option[T] = {
+    val now = clock.instant()
+
+    val secretAndSuccessfulDecodes: Stream[(SecretConfiguration, T)] = for {
+      secret <- acceptedSecrets
+      decodedValue = decodingFunc(secret)
+      if successfulDecode(decodedValue)
+    } yield secret -> decodedValue
+
+    secretAndSuccessfulDecodes.headOption.map {
+      case (secret, decodedValue) =>
+        if (secret != activeSecret) {
+          val message = s"Accepted decode with non-active key : $description"
+          if (now > warningThreshold) Logger.warn(message) else Logger.debug(message)
+        }
+        decodedValue
+    }
+  }
 }
