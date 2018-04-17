@@ -1,7 +1,7 @@
 package com.gu.play.secretrotation.aws
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{AWSCredentialsProvider, InstanceProfileCredentialsProvider}
+import com.amazonaws.auth.{AWSCredentialsProvider, EnvironmentVariableCredentialsProvider}
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
@@ -12,7 +12,7 @@ object ParameterStoreLambda extends App {
 
   def lambdaHandler(input: ScheduledEvent, context: Context): String = {
     new Updater(
-      credentials = new InstanceProfileCredentialsProvider(false),
+      credentials = new EnvironmentVariableCredentialsProvider(),
       parameterName = System.getenv("PARAMETER_NAME")
     ).updateSecret()
     "OK"
