@@ -2,17 +2,20 @@ package com.gu.play.secretrotation.aws
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProvider, InstanceProfileCredentialsProvider}
+import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.lambda.runtime.events.ScheduledEvent
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
 import com.amazonaws.services.simplesystemsmanagement.model.{DescribeParametersRequest, ParameterStringFilter, PutParameterRequest}
 import com.gu.play.secretrotation.SecretGenerator.generateSecret
 
 object ParameterStoreLambda extends App {
 
-  def lambdaHandler(): Unit = {
+  def lambdaHandler(input: ScheduledEvent, context: Context): String = {
     new Updater(
       credentials = new InstanceProfileCredentialsProvider(false),
       parameterName = System.getenv("PARAMETER_NAME")
     ).updateSecret()
+    "OK"
   }
 
   /*
@@ -20,10 +23,10 @@ object ParameterStoreLambda extends App {
      run com.gu.play.secretrotation.aws.ParameterStoreLambda
   */
   args.toList match {
-    case profileName :: parameterName =>
+    case profileName :: parameterName :: Nil =>
       val devUpdater = new Updater(
-        credentials = new ProfileCredentialsProvider(profileName),
-        parameterName = args(1)
+        new ProfileCredentialsProvider(profileName),
+        parameterName
       )
       devUpdater.updateSecret()
     case _ =>
