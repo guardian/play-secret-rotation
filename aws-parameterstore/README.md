@@ -13,14 +13,14 @@ all app servers are ready to begin using it.
 
 Add the library dependency:
 
-```
+```scala
 libraryDependencies += "com.gu.play-secret-rotation" %% "aws-parameterstore" % "0.7"
 ```
 
 In your `ApplicationComponents`, mix-in `RotatingSecretComponents` and provide the `secretStateSupplier`
 required by that trait:
 
-```
+```scala
   val secretStateSupplier: Supplier[SecretState] = new ParameterStore.SecretSupplier(
     TransitionTiming(usageDelay = Duration.ofMinutes(3), overlapDuration = Duration.ofHours(2)),
     parameterName = "/Example/PlayAppSecret",
@@ -33,7 +33,7 @@ _Note that you'll probably have to define credentials/region on the `AWSSimpleSy
 Your Play app servers will need an IAM policy like this in order
 to read the secret 'state':
 
-```
+```yaml
 - Effect: Allow
   Action: ssm:DescribeParameters
   Resource: 'arn:aws:ssm:eu-west-1:111222333444:*'
@@ -71,7 +71,7 @@ parameter that contains the secret (in this example _'Example/PlayAppSecret'_).
 
 Set the Lambda Execution role to have a policy like this:
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
