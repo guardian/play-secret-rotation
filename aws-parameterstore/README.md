@@ -5,6 +5,12 @@ Using AWS Parameter Store for Play Secret Rotation
 
 #### Play server
 
+The Play Server is only responsible for _reading_ the updates of the Application Secret - it
+doesn't update the secret itself. The state of the Application Secret (the new & old secrets,
+and when to begin switching over between the two) is fetched from AWS Parameter Store and cached
+with a short-lifetime, to ensure that soon after the AWS Parameter is updated, all app servers
+are ready to begin using it.
+
 Add the library dependency:
 
 ```
@@ -41,7 +47,7 @@ to read the secret 'state':
 
 #### Secret-Updating Lambda
 
-Set the Lambda Function code Handler to this value:
+Set the Lambda Function code `Handler` to this value:
 
 ```
 com.gu.play.secretrotation.aws.ParameterStoreLambda::lambdaHandler
@@ -80,4 +86,6 @@ Set the Lambda Execution role to have a policy like this:
 }
 ```
 
-
+Finally, use a AWS CloudWatch Scheduled Event to trigger the Lambda to run at regular intervals.
+The Lambda should not run more often than the `overlapDuration` defined in the `secretStateSupplier`
+in your Play Server - every 6 hours with a 2 hour overlap will probably work well.
