@@ -6,7 +6,7 @@ Using AWS Parameter Store for Play Secret Rotation
 #### Play server
 
 The Play Server is only responsible for _reading_ the updates of the Application Secret - it
-doesn't update the secret itself. The state of the Application Secret (the new & old secrets,
+doesn't update the secret itself. The state of the Application Secret (the old & new secrets,
 and when to begin switching over between the two) is fetched from AWS Parameter Store and cached
 with a short-lifetime, to ensure that soon after the AWS Parameter containing the secret is updated,
 all app servers are ready to begin using it.
@@ -45,13 +45,18 @@ to read the secret 'state':
   Resource: 'arn:aws:kms:eu-west-1:111222333444:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
 ```
 
-#### Application Secret is stored in an AWS Parameter
+#### Create your own AWS Parameter to hold the Application Secret
 
 The AWS Parameter in this example is called `/Example/PlayAppSecret` - create your own
 AWS Parameter to hold the Application Secret, using a type of `SecureString` and whichever
 KMS key you want to use:
 
 ![image](https://user-images.githubusercontent.com/52038/39054128-b6dd60b6-44a8-11e8-9cf2-2137bc3a3361.png)
+
+Every time you update this Parameter, your Play app servers will fetch the new secret state
+as soon as their short-lived caches expire. After the `usageDelay` has passed, they will
+start to sign cookies using the new secret, but will continue to accept cookies signed
+with the old secret until `overlapDuration` has passed.
 
 #### Secret-Updating Lambda
 
