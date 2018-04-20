@@ -3,13 +3,21 @@ Using AWS Parameter Store for Play Secret Rotation
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu.play-secret-rotation/aws-parameterstore_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu.play-secret-rotation/aws-parameterstore_2.12)
 
+#### Application Secret is stored in an AWS Parameter
+
+The AWS Parameter in this example is called `/Example/PlayAppSecret` - create your own
+AWS Parameter to hold the Application Secret, using a type of `SecureString` and whichever
+KMS key you want to use:
+
+![image](https://user-images.githubusercontent.com/52038/39054128-b6dd60b6-44a8-11e8-9cf2-2137bc3a3361.png)
+
 #### Play server
 
 The Play Server is only responsible for _reading_ the updates of the Application Secret - it
 doesn't update the secret itself. The state of the Application Secret (the new & old secrets,
 and when to begin switching over between the two) is fetched from AWS Parameter Store and cached
-with a short-lifetime, to ensure that soon after the AWS Parameter is updated, all app servers
-are ready to begin using it.
+with a short-lifetime, to ensure that soon after the AWS Parameter containing the secret is updated,
+all app servers are ready to begin using it.
 
 Add the library dependency:
 
