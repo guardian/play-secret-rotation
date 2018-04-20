@@ -1,7 +1,28 @@
 Using AWS Parameter Store for Play Secret Rotation
 =======
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu.play-secret-rotation/aws-parameterstore_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu.play-secret-rotation/aws-parameterstore_2.12)
+
 #### Play server
+
+Add the library dependency:
+
+```
+libraryDependencies += "com.gu.play-secret-rotation" %% "aws-parameterstore" % "0.7"
+```
+
+In your `ApplicationComponents`, mix-in `RotatingSecretComponents` and provide the `secretStateSupplier`
+required by that trait:
+
+```
+  val secretStateSupplier: Supplier[SecretState] = new ParameterStore.SecretSupplier(
+    TransitionTiming(usageDelay = Duration.ofMinutes(3), overlapDuration = Duration.ofHours(2)),
+    parameterName = "/Example/PlayAppSecret",
+    ssmClient = AWSSimpleSystemsManagementClientBuilder.defaultClient()
+  )
+```
+
+_Note that you'll probably have to define credentials/region on the `AWSSimpleSystemsManagementClient`_.
 
 Your Play app servers will need an IAM policy like this in order
 to read the secret 'state':
