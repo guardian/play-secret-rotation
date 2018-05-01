@@ -66,8 +66,16 @@ to read the secret 'state':
 
 #### Secret-Updating Lambda
 
-You can download the [latest published jar](https://search.maven.org/remote_content?g=com.gu.play-secret-rotation&a=aws-parameterstore-lambda_2.12&v=LATEST)
-for the AWS Lambda. 
+You don't have to do this step straight away - you've already got a
+fair bit of benefit from being able to update your Application Secret
+without downtime, and you should check that your Play servers are
+operating well with a manual update of the secret.
+
+Once you're happy that manual updates are working, you can start
+automatic scheduled updates with an AWS Lambda.
+
+Download the [latest published jar](https://search.maven.org/remote_content?g=com.gu.play-secret-rotation&a=aws-parameterstore-lambda_2.12&v=LATEST)
+for the AWS Lambda.
 
 Set the Lambda Function code `Handler` to this value:
 
