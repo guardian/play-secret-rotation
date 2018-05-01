@@ -1,35 +1,24 @@
 package com.gu.play.secretrotation.aws
 
-import java.util.function.Supplier
-
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.model.{DescribeParametersRequest, GetParametersRequest, ParameterMetadata, ParameterStringFilter}
-import com.github.blemale.scaffeine.{LoadingCache, Scaffeine}
-import com.gu.play.secretrotation.{InitialSecret, SecretState, TransitionTiming, TransitioningSecret}
+import com.gu.play.secretrotation.DualSecretTransition.{InitialSecret, TransitioningSecret}
+import com.gu.play.secretrotation._
 import play.api.Logger
 import play.api.http.SecretConfiguration
 
 import scala.collection.JavaConverters._
-import scala.concurrent.duration._
 
 object ParameterStore {
   val InitialVersion = 1
 
   class SecretSupplier(
-    transitionTiming: TransitionTiming,
+    val transitionTiming: TransitionTiming,
     parameterName: String,
     ssmClient: AWSSimpleSystemsManagement
-  ) extends Supplier[SecretState] {
+  ) extends CachingSnapshotProvider {
 
-    // make sure we don't cache the secret state too long, we need to be ready to use a new secret when issued
-    val secretStateCachingDuration = transitionTiming.usageDelay.getSeconds.seconds / 2
-
-    private val cache: LoadingCache[Unit, SecretState] =
-      Scaffeine().expireAfterWrite(secretStateCachingDuration).build(loader = _ => fetchSecretState())
-
-    override def get(): SecretState = cache.get(Unit)
-
-    def fetchSecretState(): SecretState = {
+    def loadState(): SnapshotProvider = {
       val metadata = fetchParameterMetadata()
       val latestVersion = metadata.getVersion.toLong
 
@@ -45,7 +34,7 @@ object ParameterStore {
               transitionTiming.overlapIntervalForSecretPublishedAt(metadata.getLastModifiedDate.toInstant)
           )
       }
-      Logger.info(s"Fetched Secret state: ${state.description}")
+      Logger.info(s"Fetched Secret state: ${state.snapshot().description}")
       state
     }
 
