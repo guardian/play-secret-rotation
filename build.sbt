@@ -1,7 +1,7 @@
 import ReleaseTransformations._
 
 lazy val baseSettings = Seq(
-  scalaVersion := "2.12.5",
+  scalaVersion := "2.12.6",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
   organization := "com.gu.play-secret-rotation",
   licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
@@ -11,9 +11,9 @@ lazy val baseSettings = Seq(
 lazy val core =
   project.settings(baseSettings: _*).settings(
     libraryDependencies ++= Seq(
-      "com.typesafe.play" %% "play" % "2.6.12",
-      "com.github.blemale" %% "scaffeine" % "2.5.0",
-      "org.threeten" % "threeten-extra" % "1.3.2"
+      "com.typesafe.play" %% "play" % "2.6.15",
+      "org.threeten" % "threeten-extra" % "1.3.2",
+      "org.scalatest" %% "scalatest" % "3.0.5" % "test"
     )
   )
 
