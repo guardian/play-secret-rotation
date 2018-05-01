@@ -3,6 +3,25 @@ Using AWS Parameter Store for Play Secret Rotation
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu.play-secret-rotation/aws-parameterstore_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu.play-secret-rotation/aws-parameterstore_2.12)
 
+There are three parts to this:
+
+* [Create the parameter](#create-the-aws-parameter-to-hold-the-secret) in AWS Parameter Store to hold the secret
+* [Update your Play server](#play-server) to read the rotating secrets from AWS Parameter Store
+* [Install an AWS Lambda](#secret-updating-lambda) to update the secret on a regular basis
+
+#### Create the AWS Parameter to hold the Secret
+
+As an example we'll use an AWS Parameter called `/Example/PlayAppSecret` - create your own
+AWS Parameter to hold the Application Secret, using a type of `SecureString` and whichever
+KMS key you want to use:
+
+![image](https://user-images.githubusercontent.com/52038/39054128-b6dd60b6-44a8-11e8-9cf2-2137bc3a3361.png)
+
+Every time you update this Parameter, your Play app servers will fetch the new secret state
+as soon as their short-lived caches expire. After the `usageDelay` has passed, they will
+start to sign cookies using the new secret, but will continue to accept cookies signed
+with the old secret until `overlapDuration` has passed.
+
 #### Play server
 
 The Play Server is only responsible for _reading_ the updates of the Application Secret - it
@@ -45,20 +64,10 @@ to read the secret 'state':
   Resource: 'arn:aws:kms:eu-west-1:111222333444:key/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
 ```
 
-#### Create your own AWS Parameter to hold the Application Secret
-
-The AWS Parameter in this example is called `/Example/PlayAppSecret` - create your own
-AWS Parameter to hold the Application Secret, using a type of `SecureString` and whichever
-KMS key you want to use:
-
-![image](https://user-images.githubusercontent.com/52038/39054128-b6dd60b6-44a8-11e8-9cf2-2137bc3a3361.png)
-
-Every time you update this Parameter, your Play app servers will fetch the new secret state
-as soon as their short-lived caches expire. After the `usageDelay` has passed, they will
-start to sign cookies using the new secret, but will continue to accept cookies signed
-with the old secret until `overlapDuration` has passed.
-
 #### Secret-Updating Lambda
+
+You can download the [latest published jar](https://search.maven.org/remote_content?g=com.gu.play-secret-rotation&a=aws-parameterstore-lambda_2.12&v=LATEST)
+for the AWS Lambda. 
 
 Set the Lambda Function code `Handler` to this value:
 

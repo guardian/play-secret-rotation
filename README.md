@@ -7,3 +7,5 @@ on an active cluster of Play app servers_
 More docs on how to do this:
 
 * [Using AWS Parameter Store](aws-parameterstore/README.md)
+* ...but not with AWS Secrets Manager, because
+  [surprisingly it doesn't suit the use-case very well](https://github.com/guardian/play-secret-rotation/commit/01e7fa86688).
