@@ -12,9 +12,9 @@ trait Phase[T] {
 
   val alsoAccepted: Traversable[T]
 
-  final val onlyAcceptsActive = alsoAccepted.isEmpty
+  final def onlyAcceptsActive = alsoAccepted.isEmpty
 
-  final val accepted: Stream[T] = Stream(active) ++ alsoAccepted
+  final def accepted: Stream[T] = Stream(active) ++ alsoAccepted
 
   def map[S](f: T => S): Phase[S] = {
     val activeS = f(active)

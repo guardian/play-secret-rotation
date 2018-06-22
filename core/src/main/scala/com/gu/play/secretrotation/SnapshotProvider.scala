@@ -21,12 +21,14 @@ trait SnapshotProvider {
 trait CachingSnapshotProvider extends SnapshotProvider {
   val transitionTiming: TransitionTiming
 
+  private val anyKey = new Object // would love to use Unit or something, it just wouldn't compile
+
   // make sure we don't cache the secret state too long, we need to be ready to use a new secret when issued
   private val cache = CacheBuilder.newBuilder
     .expireAfterWrite(transitionTiming.usageDelay.dividedBy(2).getSeconds, SECONDS)
-    .build(new CacheLoader[Null, SnapshotProvider] { def load(key: Null): SnapshotProvider = loadState() })
+    .build(new CacheLoader[Object, SnapshotProvider] { def load(key: Object): SnapshotProvider = loadState() })
 
-  override def snapshot(): SecretsSnapshot = cache.get(null).snapshot()
+  override def snapshot(): SecretsSnapshot = cache.get(anyKey).snapshot()
 
   def loadState(): SnapshotProvider
 }

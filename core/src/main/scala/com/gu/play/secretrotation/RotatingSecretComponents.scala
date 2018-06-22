@@ -13,8 +13,11 @@ trait RotatingSecretComponents extends BuiltInComponentsFromContext {
 
   val secretStateSupplier: SnapshotProvider
 
-  override def configuration: Configuration = super.configuration ++
-    Configuration("play.http.secret.key" -> secretStateSupplier.snapshot().secrets.active)
+  override def configuration: Configuration = {
+    val nonRotatingSecretOnlyUsedToSatisfyConfigChecks: String = secretStateSupplier.snapshot().secrets.active.secret
+
+    super.configuration ++ Configuration("play.http.secret.key" -> nonRotatingSecretOnlyUsedToSatisfyConfigChecks)
+  }
 
   override lazy val requestFactory: RequestFactory =
     RotatingSecretComponents.requestFactoryFor(secretStateSupplier, httpConfiguration)
