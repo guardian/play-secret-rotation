@@ -37,8 +37,8 @@ object DualSecretTransition {
     override def snapshot(): SecretsSnapshot = new SecretsSnapshot {
       val description = "Initial secret, no known upcoming rotation of secret"
 
-      override def decode[T](decodingFunc: SecretConfiguration => T, successfulDecode: T => Boolean): Option[T] =
-        Some(decodingFunc(secret)).filter(successfulDecode)
+      override def decode[T](decodingFunc: SecretConfiguration => T, conclusiveDecode: T => Boolean): Option[T] =
+        Seq(decodingFunc(secret)).find(conclusiveDecode)
 
       override val secrets = new Phase[SecretConfiguration] {
         val active = secret
@@ -85,14 +85,14 @@ object DualSecretTransition {
           * Want to know:
           * If decoding was successful, but with a legacy secret (especially if we are towards the end of the overlap period)
           */
-        override def decode[T](decodingFunc: SecretConfiguration => T, successfulDecode: T => Boolean): Option[T] = {
+        override def decode[T](decodingFunc: SecretConfiguration => T, conclusiveDecode: T => Boolean): Option[T] = {
           if (clock.instant() > snapshotBestBefore)
             Logger.warn("Don't hold onto snapshots! Get a new snapshot with each user interaction.")
 
           (for {
             secret <- secrets.accepted
             decodedValue = decodingFunc(secret)
-            if successfulDecode(decodedValue)
+            if conclusiveDecode(decodedValue)
           } yield {
             if (secret != secrets.active) {
               val message = s"Accepted decode with non-active key : $description"
