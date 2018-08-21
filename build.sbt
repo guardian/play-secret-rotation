@@ -12,7 +12,7 @@ lazy val core =
   project.settings(baseSettings: _*).settings(
     libraryDependencies ++= Seq(
       "com.typesafe.play" %% "play" % "2.6.17",
-      "org.threeten" % "threeten-extra" % "1.3.2",
+      "org.threeten" % "threeten-extra" % "1.4",
       "org.scalatest" %% "scalatest" % "3.0.5" % "test"
     )
   )
