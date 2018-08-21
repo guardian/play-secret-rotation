@@ -11,7 +11,16 @@ trait SecretsSnapshot {
 
   def description: String
 
-  def decode[T](decodingFunc: SecretConfiguration => T, successfulDecode: T => Boolean): Option[T]
+  /**
+    * @param decodingFunc a function that attempts to decode a value using the provided secret
+    * @param conclusiveDecode If true, no further attempts to decode with other secrets will be made,
+    *                      and the decoding result will be returned, wrapped in an Option.
+    *                      Note that a decode can be conclusive without the decoded value being *valid* -
+    *                      eg. the value may have been signed with a valid secret but expired due to it's
+    *                      own expiration constraints, or even maliciously signed with an unacceptable
+    *                      algorithm (eg a weak algorithm, even 'none' : https://tools.ietf.org/html/rfc7519#section-6.1 )
+    */
+  def decode[T](decodingFunc: SecretConfiguration => T, conclusiveDecode: T => Boolean): Option[T]
 }
 
 trait SnapshotProvider {
