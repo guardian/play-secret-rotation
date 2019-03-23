@@ -30,21 +30,28 @@ and when to begin switching over between the two) is fetched from AWS Parameter 
 with a short-lifetime, to ensure that soon after the AWS Parameter containing the secret is updated,
 all app servers are ready to begin using it.
 
-Add the library dependency:
+Add the library dependency (choose `aws-parameterstore-sdk-v1` or `aws-parameterstore-sdk-v2`
+depending on what version of the AWS SDK for Java you want to use):
 
 ```scala
-libraryDependencies += "com.gu.play-secret-rotation" %% "aws-parameterstore" % "0.7"
+libraryDependencies += "com.gu.play-secret-rotation" %% "aws-parameterstore-sdk-v1" % "0.14"
 ```
 
 In your `ApplicationComponents`, mix-in `RotatingSecretComponents` and provide the `secretStateSupplier`
 required by that trait:
 
 ```scala
-  val secretStateSupplier: Supplier[SecretState] = new ParameterStore.SecretSupplier(
-    TransitionTiming(usageDelay = Duration.ofMinutes(3), overlapDuration = Duration.ofHours(2)),
-    parameterName = "/Example/PlayAppSecret",
-    ssmClient = AWSSimpleSystemsManagementClientBuilder.defaultClient()
+import com.gu.play.secretrotation._
+
+val secretStateSupplier: SnapshotProvider = {
+  import com.gu.play.secretrotation.aws.parameterstore
+
+  new parameterstore.SecretSupplier(
+    TransitionTiming(usageDelay = ofMinutes(3), overlapDuration = ofHours(2)),
+    "/Example/PlayAppSecret",
+    parameterstore.AwsSdkV1(AWSSimpleSystemsManagementClientBuilder.defaultClient())
   )
+}
 ```
 
 _Note that you'll probably have to define credentials/region on the `AWSSimpleSystemsManagementClient`_.
@@ -53,9 +60,6 @@ Your Play app servers will need an IAM policy like this in order
 to read the secret 'state':
 
 ```yaml
-- Effect: Allow
-  Action: ssm:DescribeParameters
-  Resource: 'arn:aws:ssm:eu-west-1:111222333444:*'
 - Effect: Allow
   Action: ssm:GetParameters
   Resource: 'arn:aws:ssm:eu-west-1:111222333444:parameter/Example/PlayAppSecret'
@@ -79,7 +83,7 @@ for the AWS Lambda.
 Set the Lambda Function code `Handler` to this value:
 
 ```
-com.gu.play.secretrotation.aws.ParameterStoreLambda::lambdaHandler
+com.gu.play.secretrotation.aws.parameterstore.Lambda::lambdaHandler
 ```
 
 Set the Lambda Environment variable `PARAMETER_NAME` to the name of the
