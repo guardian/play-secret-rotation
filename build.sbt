@@ -2,7 +2,6 @@ import ReleaseTransformations._
 
 lazy val baseSettings = Seq(
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
   organization := "com.gu.play-secret-rotation",
   licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   scalacOptions ++= Seq("-deprecation", "-Xlint", "-unchecked")
@@ -57,7 +56,6 @@ lazy val `play-secret-rotation-root` = (project in file("."))
   publishArtifact := false,
   publish := {},
   publishLocal := {},
-  releaseCrossBuild := true, // true if you cross-build the project for multiple Scala versions
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
@@ -66,7 +64,7 @@ lazy val `play-secret-rotation-root` = (project in file("."))
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    releaseStepCommandAndRemaining("+publishSigned"),
+    releaseStepCommandAndRemaining("publishSigned"),
     setNextVersion,
     commitNextVersion,
     releaseStepCommand("sonatypeReleaseAll"),
