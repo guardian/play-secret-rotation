@@ -1,4 +1,4 @@
-package com.gu.play.secretrotation.aws
+package com.gu.play.secretrotation.aws.parameterstore
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{AWSCredentialsProvider, EnvironmentVariableCredentialsProvider}
@@ -8,7 +8,7 @@ import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.model.{DescribeParametersRequest, ParameterStringFilter, PutParameterRequest}
 import com.gu.play.secretrotation.SecretGenerator.generateSecret
 
-object ParameterStoreLambda extends App {
+object Lambda extends App {
 
   def lambdaHandler(input: ScheduledEvent, context: Context): String = {
     new Updater(
