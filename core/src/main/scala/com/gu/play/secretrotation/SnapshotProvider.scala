@@ -1,13 +1,13 @@
 package com.gu.play.secretrotation
 
-import com.google.common.cache.{CacheBuilder, CacheLoader}
-import play.api.http.SecretConfiguration
+import com.github.blemale.scaffeine.{LoadingCache, Scaffeine}
+import com.typesafe.scalalogging.Logger
 
 import scala.concurrent.duration._
 
 
 trait SecretsSnapshot {
-  def secrets: Phase[SecretConfiguration]
+  def secrets: Phase[String]
 
   def description: String
 
@@ -20,10 +20,12 @@ trait SecretsSnapshot {
     *                      own expiration constraints, or even maliciously signed with an unacceptable
     *                      algorithm (eg a weak algorithm, even 'none' : https://tools.ietf.org/html/rfc7519#section-6.1 )
     */
-  def decode[T](decodingFunc: SecretConfiguration => T, conclusiveDecode: T => Boolean): Option[T]
+  def decode[T](decodingFunc: String => T, conclusiveDecode: T => Boolean): Option[T]
 }
 
 trait SnapshotProvider {
+  val logger = Logger[SnapshotProvider]
+
   def snapshot(): SecretsSnapshot
 }
 
@@ -33,9 +35,9 @@ trait CachingSnapshotProvider extends SnapshotProvider {
   private val anyKey = new Object // would love to use Unit or something, it just wouldn't compile
 
   // make sure we don't cache the secret state too long, we need to be ready to use a new secret when issued
-  private val cache = CacheBuilder.newBuilder
-    .expireAfterWrite(transitionTiming.usageDelay.dividedBy(2).getSeconds, SECONDS)
-    .build(new CacheLoader[Object, SnapshotProvider] { def load(key: Object): SnapshotProvider = loadState() })
+  private val cache: LoadingCache[Object, SnapshotProvider] = Scaffeine()
+      .expireAfterWrite(transitionTiming.usageDelay.dividedBy(2).toMillis.millis)
+      .build(_ => loadState())
 
   override def snapshot(): SecretsSnapshot = cache.get(anyKey).snapshot()
 

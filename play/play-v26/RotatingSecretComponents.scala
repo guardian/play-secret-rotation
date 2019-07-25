@@ -14,7 +14,7 @@ trait RotatingSecretComponents extends BuiltInComponentsFromContext {
   val secretStateSupplier: SnapshotProvider
 
   override def configuration: Configuration = {
-    val nonRotatingSecretOnlyUsedToSatisfyConfigChecks: String = secretStateSupplier.snapshot().secrets.active.secret
+    val nonRotatingSecretOnlyUsedToSatisfyConfigChecks = secretStateSupplier.snapshot().secrets.active
 
     super.configuration ++ Configuration("play.http.secret.key" -> nonRotatingSecretOnlyUsedToSatisfyConfigChecks)
   }
@@ -38,7 +38,7 @@ object RotatingSecretComponents {
 
     implicit val c: Clock = systemUTC()
 
-    private def jwtCodecFor(secret: SecretConfiguration) = DefaultJWTCookieDataCodec(secret, jwtConfiguration)
+    private def jwtCodecFor(secret: String) = DefaultJWTCookieDataCodec(SecretConfiguration(secret), jwtConfiguration)
 
     override def encode(data: Map[String, String]): String =
       jwtCodecFor(snapshotProvider.snapshot().secrets.active).encode(data)
