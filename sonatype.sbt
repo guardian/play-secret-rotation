@@ -1,6 +1,6 @@
 sonatypeProfileName := "com.gu"
 
-publishTo in ThisBuild := sonatypePublishTo.value
+publishTo in ThisBuild := sonatypePublishToBundle.value
 
 scmInfo in ThisBuild := Some(ScmInfo(
   url("https://github.com/guardian/play-secret-rotation"),

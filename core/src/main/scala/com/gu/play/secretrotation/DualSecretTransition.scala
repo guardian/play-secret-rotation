@@ -22,7 +22,7 @@ object DualSecretTransition {
 
   object Phase {
 
-    class PhaseAge(val active: Age, val alsoAccepted: Traversable[Age] = None) extends PhaseAges
+    class PhaseAge(val active: Age, val alsoAccepted: Iterable[Age] = None) extends PhaseAges
 
     object Upcoming   extends PhaseAge(active = Old, alsoAccepted = Some(New))
     object InProgress extends PhaseAge(active = New, alsoAccepted = Some(Old))

@@ -10,5 +10,5 @@ case class ParameterValue(value: String, metadata: Metadata)
   * so that we can support both versions of the AWS SDK simultaneously.
   */
 trait MinimalAwsSdkWrapper {
-  def fetchValues(parameters: Seq[String]): Seq[ParameterValue]
+  def fetchValues(parameters: Seq[String]): Iterable[ParameterValue]
 }
