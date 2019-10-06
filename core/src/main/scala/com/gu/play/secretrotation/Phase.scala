@@ -10,7 +10,7 @@ import scala.collection.SortedMap
 trait Phase[T] {
   val active: T
 
-  val alsoAccepted: Traversable[T]
+  val alsoAccepted: Iterable[T]
 
   final def onlyAcceptsActive = alsoAccepted.isEmpty
 
