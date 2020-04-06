@@ -1,13 +1,13 @@
 import ReleaseTransformations._
 
 lazy val baseSettings = Seq(
-  scalaVersion := "2.12.10",
+  scalaVersion := "2.12.12",
   organization := "com.gu.play-secret-rotation",
   licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   scalacOptions ++= Seq("-deprecation", "-Xlint", "-unchecked")
 )
 
-lazy val crossCompileScala213 = crossScalaVersions := Seq(scalaVersion.value, "2.13.1")
+lazy val crossCompileScala213 = crossScalaVersions := Seq(scalaVersion.value, "2.13.3")
 
 lazy val core =
   project.settings(crossCompileScala213, baseSettings).settings(
@@ -23,8 +23,8 @@ lazy val `aws-parameterstore-secret-supplier-base` =
   project.in(file("aws-parameterstore/secret-supplier")).settings(crossCompileScala213, baseSettings).dependsOn(core)
 
 val awsSdkForVersion = Map(
-  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.645",
-  2 -> "software.amazon.awssdk" % "ssm" % "2.9.13"
+  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.11.845",
+  2 -> "software.amazon.awssdk" % "ssm" % "2.14.1"
 )
 
 def awsParameterStoreWithSdkVersion(version: Int)=
@@ -48,8 +48,9 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
 lazy val `secret-generator` = project.settings(crossCompileScala213, baseSettings)
 
 val exactPlayVersions = Map(
-  "26" -> "2.6.23",
-  "27" -> "2.7.3"
+  "26" -> "2.6.25",
+  "27" -> "2.7.5",
+  "28" -> "2.8.2"
 )
 
 def playVersion(majorMinorVersion: String)= {
@@ -61,12 +62,14 @@ def playVersion(majorMinorVersion: String)= {
 
 lazy val `play-v26` = playVersion("26")
 lazy val `play-v27` = playVersion("27").settings(crossCompileScala213)
+lazy val `play-v28` = playVersion("28").settings(crossCompileScala213)
 
 lazy val `play-secret-rotation-root` = (project in file("."))
   .aggregate(
     core,
     `play-v26`,
     `play-v27`,
+    `play-v28`,
     `aws-parameterstore-secret-supplier-base`,
     `aws-parameterstore-sdk-v1`,
     `aws-parameterstore-sdk-v2`,
