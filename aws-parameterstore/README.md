@@ -1,7 +1,9 @@
 Using AWS Parameter Store for Play Secret Rotation
 =======
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.gu.play-secret-rotation/aws-parameterstore-sdk-v2_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.gu.play-secret-rotation/aws-parameterstore-sdk-v2_2.12)
+[![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/)
+
+[![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/)
 
 There are three parts to this:
 
@@ -30,12 +32,27 @@ and when to begin switching over between the two) is fetched from AWS Parameter 
 with a short-lifetime, to ensure that soon after the AWS Parameter containing the secret is updated,
 all app servers are ready to begin using it.
 
-Add the library dependency (choose `aws-parameterstore-sdk-v1` or `aws-parameterstore-sdk-v2`
-depending on what version of the AWS SDK for Java you want to use):
+##### Dependencies
+
+You'll need to add two library dependencies for `com.gu.play-secret-rotation` - one dependency specific
+to your Play version, and another specific to your AWS SDK version:
+
+* **Play** ... [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v28/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v28/)
+  [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v27/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v27/)
+  [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v26/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v26/)
+* **AWS SDK** ([v1 or v2](https://docs.aws.amazon.com/sdk-for-java/latest/migration-guide/what-is-java-migration.html)) ... [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/)
+  [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/)
+
+So, for example:
 
 ```scala
-libraryDependencies += "com.gu.play-secret-rotation" %% "aws-parameterstore-sdk-v1" % "0.14"
+libraryDependencies ++= Seq(
+  "com.gu.play-secret-rotation" %% "play-v28" % "0.x",
+  "com.gu.play-secret-rotation" %% "aws-parameterstore-sdk-v2" % "0.x",
+)
 ```
+
+##### Updating `ApplicationComponents` with the rotating secret
 
 In your `ApplicationComponents`, mix-in `RotatingSecretComponents` and provide the `secretStateSupplier`
 required by that trait:
@@ -119,6 +136,6 @@ Set the Lambda Execution role to have a policy like this:
 }
 ```
 
-Finally, use a AWS CloudWatch Scheduled Event to trigger the Lambda to run at regular intervals.
+Finally, use an AWS CloudWatch Scheduled Event to trigger the Lambda to run at regular intervals.
 The Lambda should not run more often than the `overlapDuration` defined in the `secretStateSupplier`
 in your Play Server - every 6 hours with a 2 hour overlap will probably work well.
