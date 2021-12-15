@@ -9,14 +9,17 @@ lazy val baseSettings = Seq(
 
 lazy val crossCompileScala213 = crossScalaVersions := Seq(scalaVersion.value, "2.13.7")
 
+// Until all dependencies are on scala-java8-compat v1.x, this avoids unnecessary fatal eviction errors
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-java8-compat" % VersionScheme.Always
+
 lazy val core =
   project.settings(crossCompileScala213, baseSettings).settings(
     libraryDependencies ++= Seq(
-      "com.github.blemale" %% "scaffeine" % "3.1.0",
+      "com.github.blemale" %% "scaffeine" % "5.1.1",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
       "org.threeten" % "threeten-extra" % "1.7.0",
       "org.scalatest" %% "scalatest" % "3.2.9" % Test
-    ),
+    )
   )
 
 lazy val `aws-parameterstore-secret-supplier-base` =
@@ -99,7 +102,7 @@ lazy val `play-secret-rotation-root` = (project in file("."))
 
 assembly / assemblyMergeStrategy := {
   {
-    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-    case x => MergeStrategy.first
+    case PathList("META-INF", _ @ _*) => MergeStrategy.discard
+    case _ => MergeStrategy.first
   }
 }
