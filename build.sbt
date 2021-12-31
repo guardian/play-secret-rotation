@@ -15,10 +15,10 @@ ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-java8
 lazy val core =
   project.settings(crossCompileScala213, baseSettings).settings(
     libraryDependencies ++= Seq(
-      "com.github.blemale" %% "scaffeine" % "5.1.1",
+      "com.github.blemale" %% "scaffeine" % "5.1.2",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
       "org.threeten" % "threeten-extra" % "1.7.0",
-      "org.scalatest" %% "scalatest" % "3.2.9" % Test
+      "org.scalatest" %% "scalatest" % "3.2.10" % Test
     )
   )
 
@@ -27,7 +27,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
 
 val awsSdkForVersion = Map(
   1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.131",
-  2 -> "software.amazon.awssdk" % "ssm" % "2.17.100"
+  2 -> "software.amazon.awssdk" % "ssm" % "2.17.102"
 )
 
 def awsParameterStoreWithSdkVersion(version: Int)=
