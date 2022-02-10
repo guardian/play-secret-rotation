@@ -7,7 +7,7 @@ lazy val baseSettings = Seq(
   scalacOptions ++= Seq("-deprecation", "-Xlint", "-unchecked")
 )
 
-lazy val crossCompileScala213 = crossScalaVersions := Seq(scalaVersion.value, "2.13.7")
+lazy val crossCompileScala213 = crossScalaVersions := Seq(scalaVersion.value, "2.13.8")
 
 // Until all dependencies are on scala-java8-compat v1.x, this avoids unnecessary fatal eviction errors
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-java8-compat" % VersionScheme.Always
