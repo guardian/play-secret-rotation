@@ -18,7 +18,7 @@ lazy val core =
       "com.github.blemale" %% "scaffeine" % "5.1.2",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
       "org.threeten" % "threeten-extra" % "1.7.0",
-      "org.scalatest" %% "scalatest" % "3.2.10" % Test
+      "org.scalatest" %% "scalatest" % "3.2.11" % Test
     )
   )
 
