@@ -18,7 +18,7 @@ lazy val core =
       "com.github.blemale" %% "scaffeine" % "5.1.2",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
       "org.threeten" % "threeten-extra" % "1.7.0",
-      "org.scalatest" %% "scalatest" % "3.2.11" % Test
+      "org.scalatest" %% "scalatest" % "3.2.12" % Test
     )
   )
 
@@ -26,7 +26,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
   project.in(file("aws-parameterstore/secret-supplier")).settings(crossCompileScala213, baseSettings).dependsOn(core)
 
 val awsSdkForVersion = Map(
-  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.194",
+  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.217",
   2 -> "software.amazon.awssdk" % "ssm" % "2.17.189"
 )
 
