@@ -5,7 +5,7 @@ on: push
 
 jobs:
   security:
-    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
+    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@file-param
     with:
       DEBUG: true
       ORG: guardian-test
