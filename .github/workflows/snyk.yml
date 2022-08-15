@@ -7,11 +7,11 @@ on:
 
 jobs:
   security:
-    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@file-param
+    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
       DEBUG: true
       ORG: guardian-test
       SKIP_NODE: true
-      FILE: ./build.sbt
+      EXCLUDE: ./aws-parameterstore/lambda/build.sbt
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
