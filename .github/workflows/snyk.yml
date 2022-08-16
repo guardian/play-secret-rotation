@@ -12,6 +12,6 @@ jobs:
       DEBUG: true
       ORG: guardian-test
       SKIP_NODE: true
-      EXCLUDE: ./aws-parameterstore/lambda/build.sbt
+      EXCLUDE: aws-parameterstore
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
