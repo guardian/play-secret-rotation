@@ -15,7 +15,7 @@ ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-java8
 lazy val core =
   project.settings(crossCompileScala213, baseSettings).settings(
     libraryDependencies ++= Seq(
-      "com.github.blemale" %% "scaffeine" % "5.2.0",
+      "com.github.blemale" %% "scaffeine" % "5.2.1",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
       "org.threeten" % "threeten-extra" % "1.7.0",
       "org.scalatest" %% "scalatest" % "3.2.13" % Test
