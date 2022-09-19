@@ -1,7 +1,7 @@
 import ReleaseTransformations._
 
 lazy val baseSettings = Seq(
-  scalaVersion := "2.12.15",
+  scalaVersion := "2.12.17",
   organization := "com.gu.play-secret-rotation",
   licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   scalacOptions ++= Seq("-deprecation", "-Xlint", "-unchecked")
