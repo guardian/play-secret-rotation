@@ -20,7 +20,7 @@ lazy val core =
       "com.github.blemale" %% "scaffeine" % "5.2.1",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
       "org.threeten" % "threeten-extra" % "1.7.2",
-      "org.scalatest" %% "scalatest" % "3.2.14" % Test
+      "org.scalatest" %% "scalatest" % "3.2.15" % Test
     )
   )
 
@@ -29,7 +29,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
 
 val awsSdkForVersion = Map(
   1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.376",
-  2 -> "software.amazon.awssdk" % "ssm" % "2.19.8"
+  2 -> "software.amazon.awssdk" % "ssm" % "2.19.14"
 )
 
 def awsParameterStoreWithSdkVersion(version: Int)=
