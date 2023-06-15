@@ -9,7 +9,7 @@ lazy val baseSettings = Seq(
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}")
 )
 
-lazy val crossCompileScala213 = crossScalaVersions := Seq(scalaVersion.value, "2.13.10")
+lazy val crossCompileScala213 = crossScalaVersions := Seq(scalaVersion.value, "2.13.11")
 
 // Until all dependencies are on scala-java8-compat v1.x, this avoids unnecessary fatal eviction errors
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-java8-compat" % VersionScheme.Always
