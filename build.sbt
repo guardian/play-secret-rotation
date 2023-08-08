@@ -55,7 +55,7 @@ lazy val `secret-generator` = project.settings(crossCompileScala213, baseSetting
 val exactPlayVersions = Map(
   "26" -> "2.6.25",
   "27" -> "2.7.9",
-  "28" -> "2.8.18"
+  "28" -> "2.8.20"
 )
 
 def playVersion(majorMinorVersion: String)= {
