@@ -2,7 +2,7 @@ package com.gu.play.secretrotation.aws.parameterstore
 
 import software.amazon.awssdk.services.ssm.SsmClient
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 case class AwsSdkV2(ssmClient: SsmClient) extends MinimalAwsSdkWrapper{
   override def fetchValues(parameters: Seq[String]): Iterable[ParameterValue] = ssmClient.getParameters(

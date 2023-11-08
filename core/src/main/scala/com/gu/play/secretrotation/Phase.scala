@@ -14,7 +14,7 @@ trait Phase[T] {
 
   final def onlyAcceptsActive = alsoAccepted.isEmpty
 
-  final def accepted: Stream[T] = Stream(active) ++ alsoAccepted
+  final def accepted: LazyList[T] = LazyList(active) ++ alsoAccepted
 
   def map[S](f: T => S): Phase[S] = {
     val activeS = f(active)
@@ -36,6 +36,6 @@ case class PhaseSchedule[T](initialPhase: Phase[T], phaseStarts: (Instant, Phase
   val phasesByStart = SortedMap(phaseStarts: _*)
 
   def phaseAt(instant: Instant): Phase[T] =
-    phasesByStart.until(instant).values.lastOption.getOrElse(initialPhase)
+    phasesByStart.rangeUntil(instant).values.lastOption.getOrElse(initialPhase)
 
 }
