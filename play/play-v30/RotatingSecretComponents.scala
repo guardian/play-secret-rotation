@@ -1,1 +1,1 @@
-../play-v26/RotatingSecretComponents.scala
+../play-v27/RotatingSecretComponents.scala
