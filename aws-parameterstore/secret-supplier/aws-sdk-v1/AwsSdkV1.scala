@@ -3,7 +3,7 @@ package com.gu.play.secretrotation.aws.parameterstore
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.amazonaws.services.simplesystemsmanagement.model.GetParametersRequest
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 case class AwsSdkV1(ssmClient: AWSSimpleSystemsManagement) extends MinimalAwsSdkWrapper {
   override def fetchValues(parameters: Seq[String]): Iterable[ParameterValue] = ssmClient.getParameters(
