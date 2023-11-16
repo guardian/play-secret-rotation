@@ -54,7 +54,7 @@ lazy val `secret-generator` = project.settings(crossCompileScala3, baseSettings)
 
 val exactPlayVersions = Map(
   "27" -> "com.typesafe.play" %% "play" % "2.7.9",
-  "28" -> "com.typesafe.play" %% "play" % "2.8.20",
+  "28" -> "com.typesafe.play" %% "play" % "2.8.21",
   "29" -> "com.typesafe.play" %% "play" % "2.9.0",
   "30" -> "org.playframework" %% "play" % "3.0.0"
 )
