@@ -53,9 +53,9 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
 lazy val `secret-generator` = project.settings(crossCompileScala3, baseSettings)
 
 val exactPlayVersions = Map(
-  "27" -> "com.typesafe.play" %% "play" % "2.7.9",
-  "28" -> "com.typesafe.play" %% "play" % "2.8.21",
-  "29" -> "com.typesafe.play" %% "play" % "2.9.0",
+  "27" -> "org.playframework" %% "play" % "2.7.9",
+  "28" -> "org.playframework" %% "play" % "2.8.21",
+  "29" -> "org.playframework" %% "play" % "3.0.0",
   "30" -> "org.playframework" %% "play" % "3.0.0"
 )
 
