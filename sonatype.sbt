@@ -1,7 +1,3 @@
-sonatypeProfileName := "com.gu"
-
-ThisBuild / publishTo := sonatypePublishToBundle.value
-
 ThisBuild / scmInfo := Some(ScmInfo(
   url("https://github.com/guardian/play-secret-rotation"),
   "scm:git:git@github.com:guardian/play-secret-rotation.git"
