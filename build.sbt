@@ -1,4 +1,5 @@
-import ReleaseTransformations._
+import ReleaseTransformations.*
+import sbtversionpolicy.withsbtrelease.ReleaseVersion.fromAggregatedAssessedCompatibilityWithLatestRelease
 
 lazy val baseSettings = Seq(
   scalaVersion := "2.13.11",
@@ -86,9 +87,8 @@ lazy val `play-secret-rotation-root` = (project in file("."))
     `aws-parameterstore-lambda`
   )
   .settings(baseSettings).settings(
-  publishArtifact := false,
-  publish := {},
-  publishLocal := {},
+  publish / skip := true,
+  releaseVersion := fromAggregatedAssessedCompatibilityWithLatestRelease().value,
   releaseCrossBuild := true, // true if you cross-build the project for multiple Scala versions
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
@@ -98,11 +98,7 @@ lazy val `play-secret-rotation-root` = (project in file("."))
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    // For non cross-build projects, use releaseStepCommand("publishSigned")
-    releaseStepCommandAndRemaining("+publishSigned"),
-    releaseStepCommand("sonatypeBundleRelease"),
     setNextVersion,
-    commitNextVersion,
-    pushChanges
+    commitNextVersion
   )
 )
