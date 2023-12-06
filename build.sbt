@@ -84,6 +84,7 @@ lazy val `play-secret-rotation-root` = (project in file("."))
     `aws-parameterstore-secret-supplier-base`,
     `aws-parameterstore-sdk-v1`,
     `aws-parameterstore-sdk-v2`,
+    `secret-generator`,
     `aws-parameterstore-lambda`
   )
   .settings(baseSettings).settings(
