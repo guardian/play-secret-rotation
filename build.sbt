@@ -89,6 +89,7 @@ lazy val `play-secret-rotation-root` = (project in file("."))
   )
   .settings(baseSettings).settings(
   publish / skip := true,
+  releaseVersion := fromAggregatedAssessedCompatibilityWithLatestRelease().value,
   releaseCrossBuild := true, // true if you cross-build the project for multiple Scala versions
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
