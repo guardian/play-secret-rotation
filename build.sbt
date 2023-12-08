@@ -4,8 +4,8 @@ import sbtversionpolicy.withsbtrelease.ReleaseVersion.fromAggregatedAssessedComp
 lazy val baseSettings = Seq(
   scalaVersion := "2.13.12",
   organization := "com.gu.play-secret-rotation",
-  licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-  scalacOptions ++= Seq("-deprecation", "-unchecked"),
+  licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
+  scalacOptions ++= Seq("-deprecation", "-unchecked", "-release:11"),
   Test / testOptions +=
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}")
 )
