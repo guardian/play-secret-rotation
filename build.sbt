@@ -57,7 +57,7 @@ val exactPlayVersions = Map(
   "27" -> "com.typesafe.play" %% "play" % "2.7.9",
   "28" -> "com.typesafe.play" %% "play" % "2.8.20",
   "29" -> "com.typesafe.play" %% "play" % "2.9.0",
-  "30" -> "org.playframework" %% "play" % "3.0.1"
+  "30" -> "org.playframework" %% "play" % "3.0.2"
 )
 
 def playVersion(majorMinorVersion: String)= {
