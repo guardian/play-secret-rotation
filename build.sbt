@@ -2,7 +2,7 @@ import ReleaseTransformations.*
 import sbtversionpolicy.withsbtrelease.ReleaseVersion.fromAggregatedAssessedCompatibilityWithLatestRelease
 
 lazy val baseSettings = Seq(
-  scalaVersion := "2.13.12",
+  scalaVersion := "2.13.13",
   organization := "com.gu.play-secret-rotation",
   licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-release:11"),
