@@ -10,7 +10,7 @@ lazy val baseSettings = Seq(
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}")
 )
 
-lazy val crossCompileScala3 = crossScalaVersions := Seq(scalaVersion.value, "3.3.1")
+lazy val crossCompileScala3 = crossScalaVersions := Seq(scalaVersion.value, "3.3.3")
 
 // Until all dependencies are on scala-java8-compat v1.x, this avoids unnecessary fatal eviction errors
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-java8-compat" % VersionScheme.Always
@@ -57,7 +57,7 @@ val exactPlayVersions = Map(
   "27" -> "com.typesafe.play" %% "play" % "2.7.9",
   "28" -> "com.typesafe.play" %% "play" % "2.8.20",
   "29" -> "com.typesafe.play" %% "play" % "2.9.0",
-  "30" -> "org.playframework" %% "play" % "3.0.1"
+  "30" -> "org.playframework" %% "play" % "3.0.2"
 )
 
 def playVersion(majorMinorVersion: String)= {
