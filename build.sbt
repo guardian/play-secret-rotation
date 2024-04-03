@@ -12,9 +12,6 @@ lazy val baseSettings = Seq(
 
 lazy val crossCompileScala3 = crossScalaVersions := Seq(scalaVersion.value, "3.3.3")
 
-// Until all dependencies are on scala-java8-compat v1.x, this avoids unnecessary fatal eviction errors
-ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-java8-compat" % VersionScheme.Always
-
 lazy val core =
   project.settings(crossCompileScala3, baseSettings).settings(
     libraryDependencies ++= Seq(
@@ -29,7 +26,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
   project.in(file("aws-parameterstore/secret-supplier")).settings(crossCompileScala3, baseSettings).dependsOn(core)
 
 val awsSdkForVersion = Map(
-  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.692",
+  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.693",
   2 -> "software.amazon.awssdk" % "ssm" % "2.25.22"
 )
 
@@ -54,9 +51,8 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
 lazy val `secret-generator` = project.settings(crossCompileScala3, baseSettings)
 
 val exactPlayVersions = Map(
-  "27" -> "com.typesafe.play" %% "play" % "2.7.9",
-  "28" -> "com.typesafe.play" %% "play" % "2.8.20",
-  "29" -> "com.typesafe.play" %% "play" % "2.9.0",
+  "28" -> "com.typesafe.play" %% "play" % "2.8.21",
+  "29" -> "com.typesafe.play" %% "play" % "2.9.2",
   "30" -> "org.playframework" %% "play" % "3.0.2"
 )
 
@@ -68,7 +64,6 @@ def playVersion(majorMinorVersion: String)= {
 }
 
 
-lazy val `play-v27` = playVersion("27")
 lazy val `play-v28` = playVersion("28")
 lazy val `play-v29` = playVersion("29").settings(crossCompileScala3)
 lazy val `play-v30` = playVersion("30").settings(crossCompileScala3)
@@ -77,7 +72,6 @@ lazy val `play-v30` = playVersion("30").settings(crossCompileScala3)
 lazy val `play-secret-rotation-root` = (project in file("."))
   .aggregate(
     core,
-    `play-v27`,
     `play-v28`,
     `play-v29`,
     `play-v30`,
