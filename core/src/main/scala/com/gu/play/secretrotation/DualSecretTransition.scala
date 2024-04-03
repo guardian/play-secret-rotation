@@ -1,8 +1,7 @@
 package com.gu.play.secretrotation
 
 import java.time.Clock.systemUTC
-import java.time.{Clock, Duration}
-
+import java.time.{Clock, Duration, Instant}
 import com.gu.play.secretrotation.DualSecretTransition.Phase.{Completed, InProgress, Upcoming}
 import com.gu.play.secretrotation.DualSecretTransition.Secret.{Age, New, Old}
 import org.threeten.extra.Interval
@@ -59,7 +58,7 @@ object DualSecretTransition {
 
     val overlapDuration = overlapInterval.toDuration
     val permittedSnapshotStaleness = overlapDuration.dividedBy(10)
-    val warningThreshold = overlapInterval.getStart.plus(overlapDuration.dividedBy(3).multipliedBy(2))
+    val warningThreshold: Instant = overlapInterval.getEnd.minus(overlapDuration.dividedBy(5))
 
     def snapshot(): SecretsSnapshot = {
       val snapshotTime = clock.instant()
