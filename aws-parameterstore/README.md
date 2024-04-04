@@ -37,9 +37,8 @@ all app servers are ready to begin using it.
 You'll need to add two library dependencies for `com.gu.play-secret-rotation` - one dependency specific
 to your Play version, and another specific to your AWS SDK version:
 
-* **Play** ... [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v28/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v28/)
-  [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v27/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v27/)
-  [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v26/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v26/)
+* **Play** ... 
+[![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v30/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v30/) [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v29/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v29/) [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v28/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v28/)
 * **AWS SDK** ([v1 or v2](https://docs.aws.amazon.com/sdk-for-java/latest/migration-guide/what-is-java-migration.html)) ... [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/)
   [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/)
 
