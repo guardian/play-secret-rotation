@@ -21,6 +21,15 @@ trait SecretsSnapshot {
     *                      algorithm (eg a weak algorithm, even 'none' : https://tools.ietf.org/html/rfc7519#section-6.1 )
     */
   def decode[T](decodingFunc: String => T, conclusiveDecode: T => Boolean): Option[T]
+
+  /**
+   * This convenience function lets you attempt to decode a value using all applicable secrets, assuming that a
+   * successful decode will lead to a populated Option.
+   *
+   * @param decodingFunc a function that attempts to decode a value using the provided secret - the function should
+   *                     return Some(value) if the decoding was successful, or None if it was not
+   */
+  def decodeOpt[T](decodingFunc: String => Option[T]): Option[T] = decode[Option[T]](decodingFunc, _.nonEmpty).flatten
 }
 
 trait SnapshotProvider {
@@ -43,6 +52,3 @@ trait CachingSnapshotProvider extends SnapshotProvider {
 
   def loadState(): SnapshotProvider
 }
-
-
-
