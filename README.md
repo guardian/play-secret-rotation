@@ -12,9 +12,6 @@ on an active cluster of Play app servers_
 
 [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v28/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v28/)
 
-[![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v27/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v27/)
-
-
 Detailed docs on how to use this library:
 
 * [Using AWS Parameter Store](aws-parameterstore/README.md)
