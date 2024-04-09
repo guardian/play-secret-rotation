@@ -20,7 +20,7 @@ trait RotatingSecretComponents extends BuiltInComponentsFromContext {
   override def configuration: Configuration = {
     val nonRotatingSecretOnlyUsedToSatisfyConfigChecks = secretStateSupplier.snapshot().secrets.active
 
-    super.configuration.withFallback(Configuration("play.http.secret.key" -> nonRotatingSecretOnlyUsedToSatisfyConfigChecks))
+    Configuration("play.http.secret.key" -> nonRotatingSecretOnlyUsedToSatisfyConfigChecks).withFallback(super.configuration)
   }
 
   override lazy val requestFactory: RequestFactory =
