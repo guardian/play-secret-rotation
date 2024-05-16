@@ -26,7 +26,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
   project.in(file("aws-parameterstore/secret-supplier")).settings(crossCompileScala3, baseSettings).dependsOn(core)
 
 val awsSdkForVersion = Map(
-  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.716",
+  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.723",
   2 -> "software.amazon.awssdk" % "ssm" % "2.25.48"
 )
 
