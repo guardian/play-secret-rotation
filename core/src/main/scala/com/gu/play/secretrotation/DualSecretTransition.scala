@@ -29,15 +29,15 @@ object DualSecretTransition {
   }
 
 
-  case class InitialSecret(secret: String) extends SnapshotProvider {
+  case class InitialSecret[S](secret: S) extends SnapshotProvider[S] {
 
-    override def snapshot(): SecretsSnapshot = new SecretsSnapshot {
+    override def snapshot(): SecretsSnapshot[S] = new SecretsSnapshot[S] {
       val description = "Initial secret, no known upcoming rotation of secret"
 
-      override def decode[T](decodingFunc: String => T, conclusiveDecode: T => Boolean): Option[T] =
+      override def decode[T](decodingFunc: S => T, conclusiveDecode: T => Boolean): Option[T] =
         Seq(decodingFunc(secret)).find(conclusiveDecode)
 
-      override val secrets = new Phase[String] {
+      override val secrets = new Phase[S] {
         val active = secret
         val alsoAccepted = Nil
       }
@@ -45,11 +45,11 @@ object DualSecretTransition {
   }
 
 
-  case class TransitioningSecret(
-    oldSecret: String,
-    newSecret: String,
+  case class TransitioningSecret[S](
+    oldSecret: S,
+    newSecret: S,
     overlapInterval: Interval
-  )(implicit clock: Clock = systemUTC()) extends SnapshotProvider {
+  )(implicit clock: Clock = systemUTC()) extends SnapshotProvider[S] {
 
     val secretsByAge = Map(Old -> oldSecret, New -> newSecret)
 
@@ -60,14 +60,14 @@ object DualSecretTransition {
     val permittedSnapshotStaleness = overlapDuration.dividedBy(10)
     val warningThreshold: Instant = overlapInterval.getEnd.minus(overlapDuration.dividedBy(5))
 
-    def snapshot(): SecretsSnapshot = {
+    def snapshot(): SecretsSnapshot[S] = {
       val snapshotTime = clock.instant()
       val snapshotBestBefore = snapshotTime.plus(permittedSnapshotStaleness)
 
       val phase = phaseSchedule.phaseAt(snapshotTime)
 
-      new SecretsSnapshot {
-        override def secrets: Phase[String] = phase.map(secretsByAge)
+      new SecretsSnapshot[S] {
+        override def secrets: Phase[S] = phase.map(secretsByAge)
 
         override def description: String = phase match {
           case Upcoming =>
@@ -82,7 +82,7 @@ object DualSecretTransition {
           * Want to know:
           * If decoding was successful, but with a legacy secret (especially if we are towards the end of the overlap period)
           */
-        override def decode[T](decodingFunc: String => T, conclusiveDecode: T => Boolean): Option[T] = {
+        override def decode[T](decodingFunc: S => T, conclusiveDecode: T => Boolean): Option[T] = {
           if (clock.instant() > snapshotBestBefore)
             logger.warn("Don't hold onto snapshots! Get a new snapshot with each user interaction.")
 

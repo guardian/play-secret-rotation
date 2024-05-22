@@ -15,7 +15,7 @@ import scala.concurrent.duration._
 
 trait RotatingSecretComponents extends BuiltInComponentsFromContext {
 
-  val secretStateSupplier: SnapshotProvider
+  val secretStateSupplier: SnapshotProvider[String]
 
   override def configuration: Configuration = {
     val nonRotatingSecretOnlyUsedToSatisfyConfigChecks = secretStateSupplier.snapshot().secrets.active
@@ -31,7 +31,7 @@ trait RotatingSecretComponents extends BuiltInComponentsFromContext {
 }
 
 object RotatingSecretComponents {
-  def requestFactoryFor(snapshotProvider: SnapshotProvider, hc: HttpConfiguration): RequestFactory =
+  def requestFactoryFor(snapshotProvider: SnapshotProvider[String], hc: HttpConfiguration): RequestFactory =
     new DefaultRequestFactory(
       new DefaultCookieHeaderEncoding(hc.cookies),
       new RotatingKeySessionCookieBaker(hc.session, snapshotProvider),
@@ -40,7 +40,7 @@ object RotatingSecretComponents {
 
 
   trait RotatingSecretCookieCodec extends CookieDataCodec {
-    val snapshotProvider: SnapshotProvider
+    val snapshotProvider: SnapshotProvider[String]
     val jwtConfiguration: JWTConfiguration
 
     implicit val c: Clock = systemUTC()
@@ -57,18 +57,18 @@ object RotatingSecretComponents {
 
   class RotatingKeySessionCookieBaker(
     val config: SessionConfiguration,
-    val snapshotProvider: SnapshotProvider) extends SessionCookieBaker with RotatingSecretCookieCodec {
+    val snapshotProvider: SnapshotProvider[String]) extends SessionCookieBaker with RotatingSecretCookieCodec {
     override val jwtConfiguration: JWTConfiguration = config.jwt
   }
 
   class RotatingKeyFlashCookieBaker(
     val config: FlashConfiguration,
-    val snapshotProvider: SnapshotProvider) extends FlashCookieBaker with RotatingSecretCookieCodec {
+    val snapshotProvider: SnapshotProvider[String]) extends FlashCookieBaker with RotatingSecretCookieCodec {
     override val jwtConfiguration: JWTConfiguration = config.jwt
   }
 
   class RotatingKeyCSRFTokenSigner(
-    snapshotProvider: SnapshotProvider,
+    snapshotProvider: SnapshotProvider[String],
     clock: Clock) extends CSRFTokenSigner {
 
     private val signerCache: LoadingCache[String, DefaultCSRFTokenSigner] = Scaffeine()

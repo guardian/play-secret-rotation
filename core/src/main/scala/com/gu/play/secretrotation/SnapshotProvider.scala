@@ -6,8 +6,8 @@ import com.typesafe.scalalogging.Logger
 import scala.concurrent.duration._
 
 
-trait SecretsSnapshot {
-  def secrets: Phase[String]
+trait SecretsSnapshot[S] {
+  def secrets: Phase[S]
 
   def description: String
 
@@ -20,7 +20,7 @@ trait SecretsSnapshot {
     *                      own expiration constraints, or even maliciously signed with an unacceptable
     *                      algorithm (eg a weak algorithm, even 'none' : https://tools.ietf.org/html/rfc7519#section-6.1 )
     */
-  def decode[T](decodingFunc: String => T, conclusiveDecode: T => Boolean): Option[T]
+  def decode[T](decodingFunc: S => T, conclusiveDecode: T => Boolean): Option[T]
 
   /**
    * This convenience function lets you attempt to decode a value using all applicable secrets, assuming that a
@@ -29,26 +29,26 @@ trait SecretsSnapshot {
    * @param decodingFunc a function that attempts to decode a value using the provided secret - the function should
    *                     return Some(value) if the decoding was successful, or None if it was not
    */
-  def decodeOpt[T](decodingFunc: String => Option[T]): Option[T] = decode[Option[T]](decodingFunc, _.nonEmpty).flatten
+  def decodeOpt[T](decodingFunc: S => Option[T]): Option[T] = decode[Option[T]](decodingFunc, _.nonEmpty).flatten
 }
 
-trait SnapshotProvider {
-  val logger = Logger[SnapshotProvider]
+trait SnapshotProvider[S] {
+  val logger = Logger[SnapshotProvider[S]]
 
-  def snapshot(): SecretsSnapshot
+  def snapshot(): SecretsSnapshot[S]
 }
 
-trait CachingSnapshotProvider extends SnapshotProvider {
+trait CachingSnapshotProvider[S] extends SnapshotProvider[S] {
   val transitionTiming: TransitionTiming
 
   private val anyKey = new Object // would love to use Unit or something, it just wouldn't compile
 
   // make sure we don't cache the secret state too long, we need to be ready to use a new secret when issued
-  private val cache: LoadingCache[Object, SnapshotProvider] = Scaffeine()
+  private val cache: LoadingCache[Object, SnapshotProvider[S]] = Scaffeine()
       .expireAfterWrite(transitionTiming.usageDelay.dividedBy(2).toMillis.millis)
       .build(_ => loadState())
 
-  override def snapshot(): SecretsSnapshot = cache.get(anyKey).snapshot()
+  override def snapshot(): SecretsSnapshot[S] = cache.get(anyKey).snapshot()
 
-  def loadState(): SnapshotProvider
+  def loadState(): SnapshotProvider[S]
 }

@@ -11,11 +11,11 @@ class SecretSupplier(
   val transitionTiming: TransitionTiming,
   parameterName: String,
   ssmClient: MinimalAwsSdkWrapper
-) extends CachingSnapshotProvider {
+) extends CachingSnapshotProvider[String] {
 
   val InitialVersion = 1
 
-  def loadState(): SnapshotProvider = {
+  def loadState(): SnapshotProvider[String] = {
     val latestValue = ssmClient.fetchValues(Seq(parameterName)).head
     val latestVersion = latestValue.metadata.version
 
