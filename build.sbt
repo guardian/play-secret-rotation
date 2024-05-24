@@ -51,7 +51,7 @@ lazy val `secret-generator` = project.settings(baseSettings)
 
 val exactPlayVersions = Map(
   "29" -> "com.typesafe.play" %% "play" % "2.9.2",
-  "30" -> "org.playframework" %% "play" % "3.0.2"
+  "30" -> "org.playframework" %% "play" % "3.0.3"
 )
 
 def playVersion(majorMinorVersion: String)= {
