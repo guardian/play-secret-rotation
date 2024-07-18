@@ -42,7 +42,7 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
   .settings(baseSettings).dependsOn(`secret-generator`).settings(
   libraryDependencies ++= Seq(
     "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
-    "com.amazonaws" % "aws-lambda-java-events" % "3.11.6",
+    "com.amazonaws" % "aws-lambda-java-events" % "3.12.0",
     awsSdkForVersion(1)
   )
 )
