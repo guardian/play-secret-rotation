@@ -14,7 +14,7 @@ lazy val baseSettings = Seq(
 lazy val core =
   project.settings(baseSettings).settings(
     libraryDependencies ++= Seq(
-      "com.github.blemale" %% "scaffeine" % "5.2.1",
+      "com.github.blemale" %% "scaffeine" % "5.3.0",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
       "org.threeten" % "threeten-extra" % "1.8.0",
       "org.scalatest" %% "scalatest" % "3.2.19" % Test
