@@ -11,13 +11,15 @@ lazy val baseSettings = Seq(
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}")
 )
 
+val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2"
+
 lazy val core =
   project.settings(baseSettings).settings(
     libraryDependencies ++= Seq(
       "com.github.blemale" %% "scaffeine" % "5.3.0",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
       "org.threeten" % "threeten-extra" % "1.8.0",
-      "org.scalatest" %% "scalatest" % "3.2.19" % Test
+      "org.scalatest" %% "scalatest" % "3.2.19" % Test,
     )
   )
 
@@ -25,7 +27,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
   project.in(file("aws-parameterstore/secret-supplier")).settings(baseSettings).dependsOn(core)
 
 val awsSdkForVersion = Map(
-  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.767",
+  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.768",
   2 -> "software.amazon.awssdk" % "ssm" % "2.26.31"
 )
 
@@ -43,14 +45,15 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
   libraryDependencies ++= Seq(
     "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
     "com.amazonaws" % "aws-lambda-java-events" % "3.13.0",
-    awsSdkForVersion(1)
+    awsSdkForVersion(1),
+    jacksonOverride,
   )
 )
 
 lazy val `secret-generator` = project.settings(baseSettings)
 
 val exactPlayVersions = Map(
-  "29" -> "com.typesafe.play" %% "play" % "2.9.2",
+  "29" -> "com.typesafe.play" %% "play" % "2.9.5",
   "30" -> "org.playframework" %% "play" % "3.0.5"
 )
 
@@ -58,7 +61,10 @@ def playVersion(majorMinorVersion: String)= {
   Project(s"play-v$majorMinorVersion", file(s"play/play-v$majorMinorVersion"))
     .settings(baseSettings)
     .dependsOn(core)
-    .settings(libraryDependencies += exactPlayVersions(majorMinorVersion))
+    .settings(libraryDependencies ++= Seq(
+      exactPlayVersions(majorMinorVersion),
+      jacksonOverride,
+    ))
 }
 
 lazy val `play-v29` = playVersion("29")
