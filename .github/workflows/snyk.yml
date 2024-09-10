@@ -9,7 +9,7 @@ jobs:
     uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
       DEBUG: true
-      ORG: guardian-ophan
+      ORG: scala-guild
       SKIP_NODE: true
       EXCLUDE: aws-parameterstore
     secrets:
