@@ -8,7 +8,7 @@ lazy val baseSettings = Seq(
   licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-release:11"),
   Test / testOptions +=
-    Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}")
+    Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}", "-o")
 )
 
 val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2"
