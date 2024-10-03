@@ -3,7 +3,7 @@ import sbtversionpolicy.withsbtrelease.ReleaseVersion.fromAggregatedAssessedComp
 
 lazy val baseSettings = Seq(
   scalaVersion := "2.13.15",
-  crossScalaVersions := Seq(scalaVersion.value, "3.3.3"),
+  crossScalaVersions := Seq(scalaVersion.value, "3.3.4"),
   organization := "com.gu.play-secret-rotation",
   licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-release:11"),
@@ -11,7 +11,7 @@ lazy val baseSettings = Seq(
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}", "-o")
 )
 
-val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.17.2"
+val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.18.0"
 
 lazy val core =
   project.settings(baseSettings).settings(
