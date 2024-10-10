@@ -27,7 +27,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
   project.in(file("aws-parameterstore/secret-supplier")).settings(baseSettings).dependsOn(core)
 
 val awsSdkForVersion = Map(
-  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.771",
+  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.773",
   2 -> "software.amazon.awssdk" % "ssm" % "2.27.22"
 )
 
@@ -44,7 +44,7 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
   .settings(baseSettings).dependsOn(`secret-generator`).settings(
   libraryDependencies ++= Seq(
     "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
-    "com.amazonaws" % "aws-lambda-java-events" % "3.13.0",
+    "com.amazonaws" % "aws-lambda-java-events" % "3.14.0",
     awsSdkForVersion(1),
     jacksonOverride,
   )
