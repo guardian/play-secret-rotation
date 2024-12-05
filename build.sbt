@@ -11,7 +11,7 @@ lazy val baseSettings = Seq(
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}", "-o")
 )
 
-val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.18.1"
+val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.18.2"
 
 lazy val core =
   project.settings(baseSettings).settings(
@@ -54,7 +54,7 @@ lazy val `secret-generator` = project.settings(baseSettings)
 
 val exactPlayVersions = Map(
   "29" -> "com.typesafe.play" %% "play" % "2.9.5",
-  "30" -> "org.playframework" %% "play" % "3.0.5"
+  "30" -> "org.playframework" %% "play" % "3.0.6"
 )
 
 def playVersion(majorMinorVersion: String)= {
