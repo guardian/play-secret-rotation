@@ -28,7 +28,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
 
 val awsSdkForVersion = Map(
   1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.780",
-  2 -> "software.amazon.awssdk" % "ssm" % "2.30.17"
+  2 -> "software.amazon.awssdk" % "ssm" % "2.30.38"
 )
 
 def awsParameterStoreWithSdkVersion(version: Int)=
