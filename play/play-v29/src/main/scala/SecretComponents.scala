@@ -1,19 +1,18 @@
 package com.gu.play.secretrotation
 
+import com.github.blemale.scaffeine.{LoadingCache, Scaffeine}
+import play.api.http._
+import play.api.libs.crypto.{CSRFTokenSigner, DefaultCSRFTokenSigner, DefaultCookieSigner}
+import play.api.mvc.request.{DefaultRequestFactory, RequestFactory}
+import play.api.mvc._
+import play.api.{BuiltInComponentsFromContext, Configuration}
+
+import java.security.MessageDigest
 import java.time.Clock
 import java.time.Clock.systemUTC
+import scala.concurrent.duration.DurationInt
 
-import play.api.http._
-import play.api.mvc._
-import play.api.mvc.request.{DefaultRequestFactory, RequestFactory}
-import play.api.{BuiltInComponentsFromContext, Configuration}
-import play.api.libs.crypto.{CSRFTokenSigner, CSRFTokenSignerProvider, DefaultCSRFTokenSigner, DefaultCookieSigner}
-import java.security.MessageDigest
-import com.github.blemale.scaffeine.{Scaffeine, LoadingCache}
-import scala.concurrent.duration._
-
-
-trait RotatingSecretComponents extends BuiltInComponentsFromContext {
+trait SecretComponents extends BuiltInComponentsFromContext {
 
   val secretStateSupplier: SnapshotProvider
 
@@ -24,22 +23,22 @@ trait RotatingSecretComponents extends BuiltInComponentsFromContext {
   }
 
   override lazy val requestFactory: RequestFactory =
-    RotatingSecretComponents.requestFactoryFor(secretStateSupplier, httpConfiguration)
+    SecretComponents.requestFactoryFor(secretStateSupplier, httpConfiguration)
 
   override lazy val csrfTokenSigner: CSRFTokenSigner =
-    new RotatingSecretComponents.RotatingKeyCSRFTokenSigner(secretStateSupplier, systemUTC())
+    new SecretComponents.SnapshotKeyCSRFTokenSigner(secretStateSupplier, systemUTC())
 }
 
-object RotatingSecretComponents {
+object SecretComponents {
   def requestFactoryFor(snapshotProvider: SnapshotProvider, hc: HttpConfiguration): RequestFactory =
     new DefaultRequestFactory(
       new DefaultCookieHeaderEncoding(hc.cookies),
-      new RotatingKeySessionCookieBaker(hc.session, snapshotProvider),
-      new RotatingKeyFlashCookieBaker(hc.flash, snapshotProvider)
+      new SnapshotKeySessionCookieBaker(hc.session, snapshotProvider),
+      new SnapshotKeyFlashCookieBaker(hc.flash, snapshotProvider)
     )
 
 
-  trait RotatingSecretCookieCodec extends CookieDataCodec {
+  trait SnapshotSecretCookieCodec extends CookieDataCodec {
     val snapshotProvider: SnapshotProvider
     val jwtConfiguration: JWTConfiguration
 
@@ -55,31 +54,34 @@ object RotatingSecretComponents {
     }
   }
 
-  class RotatingKeySessionCookieBaker(
-    val config: SessionConfiguration,
-    val snapshotProvider: SnapshotProvider) extends SessionCookieBaker with RotatingSecretCookieCodec {
+  class SnapshotKeySessionCookieBaker(
+     val config: SessionConfiguration,
+     val snapshotProvider: SnapshotProvider) extends SessionCookieBaker with SnapshotSecretCookieCodec {
     override val jwtConfiguration: JWTConfiguration = config.jwt
   }
 
-  class RotatingKeyFlashCookieBaker(
-    val config: FlashConfiguration,
-    val snapshotProvider: SnapshotProvider) extends FlashCookieBaker with RotatingSecretCookieCodec {
+  class SnapshotKeyFlashCookieBaker(
+     val config: FlashConfiguration,
+     val snapshotProvider: SnapshotProvider) extends FlashCookieBaker with SnapshotSecretCookieCodec {
     override val jwtConfiguration: JWTConfiguration = config.jwt
   }
 
-  class RotatingKeyCSRFTokenSigner(
-    snapshotProvider: SnapshotProvider,
-    clock: Clock) extends CSRFTokenSigner {
+  class SnapshotKeyCSRFTokenSigner(
+     snapshotProvider: SnapshotProvider,
+     clock: Clock) extends CSRFTokenSigner {
 
     private val signerCache: LoadingCache[String, DefaultCSRFTokenSigner] = Scaffeine()
       .expireAfterAccess(1.day) // stop the cache growing indefinitely
       .build(secret => new DefaultCSRFTokenSigner(new DefaultCookieSigner(SecretConfiguration(secret)), clock))
 
     private def signerForActiveSecret() = signerCache.get(snapshotProvider.snapshot().secrets.active)
-    
+
     override def signToken(token: String): String = signerForActiveSecret().signToken(token)
+
     override def generateToken: String = signerForActiveSecret().generateToken
+
     override def generateSignedToken: String = signerForActiveSecret().generateSignedToken
+
     override def constantTimeEquals(a: String, b: String): Boolean = signerForActiveSecret().constantTimeEquals(a, b)
 
     /**
