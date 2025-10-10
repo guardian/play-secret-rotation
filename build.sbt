@@ -2,7 +2,7 @@ import ReleaseTransformations.*
 import sbtversionpolicy.withsbtrelease.ReleaseVersion.fromAggregatedAssessedCompatibilityWithLatestRelease
 
 lazy val baseSettings = Seq(
-  scalaVersion := "2.13.16",
+  scalaVersion := "2.13.17",
   crossScalaVersions := Seq(scalaVersion.value, "3.3.6"),
   organization := "com.gu.play-secret-rotation",
   licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
