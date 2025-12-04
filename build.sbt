@@ -12,6 +12,7 @@ lazy val baseSettings = Seq(
 )
 
 val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.20.1"
+val lz4JavaOverride = "org.lz4" % "lz4-java" % "1.8.1"
 
 lazy val core =
   project.settings(baseSettings).settings(
@@ -64,6 +65,7 @@ def playVersion(majorMinorVersion: String)= {
     .settings(libraryDependencies ++= Seq(
       exactPlayVersions(majorMinorVersion),
       jacksonOverride,
+      lz4JavaOverride,
     ))
 }
 
