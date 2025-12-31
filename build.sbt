@@ -5,7 +5,7 @@ lazy val baseSettings = Seq(
   scalaVersion := "2.13.18",
   crossScalaVersions := Seq(scalaVersion.value, "3.3.7"),
   organization := "com.gu.play-secret-rotation",
-  licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
+  licenses := Seq(License.Apache2),
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-release:11"),
   Test / testOptions +=
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}", "-o")
@@ -27,8 +27,7 @@ lazy val `aws-parameterstore-secret-supplier-base` =
   project.in(file("aws-parameterstore/secret-supplier")).settings(baseSettings).dependsOn(core)
 
 val awsSdkForVersion = Map(
-  1 -> "com.amazonaws" % "aws-java-sdk-ssm" % "1.12.796",
-  2 -> "software.amazon.awssdk" % "ssm" % "2.32.33"
+  2 -> "software.amazon.awssdk" % "ssm" % "2.41.0"
 )
 
 def awsParameterStoreWithSdkVersion(version: Int)=
@@ -37,7 +36,6 @@ def awsParameterStoreWithSdkVersion(version: Int)=
   .dependsOn(`aws-parameterstore-secret-supplier-base`)
   .settings(libraryDependencies += awsSdkForVersion(version))
 
-lazy val `aws-parameterstore-sdk-v1` = awsParameterStoreWithSdkVersion(1)
 lazy val `aws-parameterstore-sdk-v2` = awsParameterStoreWithSdkVersion(2)
 
 lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambda"))
@@ -45,7 +43,7 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
   libraryDependencies ++= Seq(
     "com.amazonaws" % "aws-lambda-java-core" % "1.4.0",
     "com.amazonaws" % "aws-lambda-java-events" % "3.16.1",
-    awsSdkForVersion(1),
+    awsSdkForVersion(2),
     jacksonOverride,
   )
 )
@@ -77,7 +75,6 @@ lazy val `play-secret-rotation-root` = (project in file("."))
     `play-v29`,
     `play-v30`,
     `aws-parameterstore-secret-supplier-base`,
-    `aws-parameterstore-sdk-v1`,
     `aws-parameterstore-sdk-v2`,
     `secret-generator`,
     `aws-parameterstore-lambda`
