@@ -1,14 +1,12 @@
 play-secret-rotation
 =========
 
-_Rotating your [Application Secret](https://www.playframework.com/documentation/2.9.x/ApplicationSecret)
+_Rotating your [Application Secret](https://www.playframework.com/documentation/3.0.x/ApplicationSecret)
 on an active cluster of Play app servers - without downtime_
 
 [![Release](https://github.com/guardian/play-secret-rotation/actions/workflows/release.yml/badge.svg)](https://github.com/guardian/play-secret-rotation/actions/workflows/release.yml)
 
 [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v30/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v30/)
-
-[![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v29/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v29/)
 
 #### How to use this Play add-on
 

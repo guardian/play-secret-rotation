@@ -5,7 +5,7 @@ lazy val baseSettings = Seq(
   scalaVersion := "2.13.18",
   crossScalaVersions := Seq(scalaVersion.value, "3.3.7"),
   organization := "com.gu.play-secret-rotation",
-  licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
+  licenses := Seq(License.Apache2),
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-release:11"),
   Test / testOptions +=
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}", "-o")
@@ -53,7 +53,6 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
 lazy val `secret-generator` = project.settings(baseSettings)
 
 val exactPlayVersions = Map(
-  "29" -> "com.typesafe.play" %% "play" % "2.9.5",
   "30" -> "org.playframework" %% "play" % "3.0.10"
 )
 
@@ -67,14 +66,12 @@ def playVersion(majorMinorVersion: String)= {
     ))
 }
 
-lazy val `play-v29` = playVersion("29")
 lazy val `play-v30` = playVersion("30")
 
 
 lazy val `play-secret-rotation-root` = (project in file("."))
   .aggregate(
     core,
-    `play-v29`,
     `play-v30`,
     `aws-parameterstore-secret-supplier-base`,
     `aws-parameterstore-sdk-v1`,
