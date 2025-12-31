@@ -4,8 +4,7 @@ import com.gu.play.secretrotation.DualSecretTransition.{InitialSecret, Transitio
 import com.gu.play.secretrotation.{CachingSnapshotProvider, SnapshotProvider, TransitionTiming}
 
 /**
-  * @param ssmClient use the implementation of this compiled against AWS SDK v1 or v2
-  *                  as required.
+  * @param ssmClient use the [[com.gu.play.secretrotation.aws.parameterstore.AwsSdkV2]] implementation
   */
 class SecretSupplier(
   val transitionTiming: TransitionTiming,
