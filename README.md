@@ -8,8 +8,6 @@ on an active cluster of Play app servers - without downtime_
 
 [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v30/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v30/)
 
-[![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v29/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v29/)
-
 #### How to use this Play add-on
 
 You'll need to choose a secure data-store for holding your Application Secret:
