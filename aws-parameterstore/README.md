@@ -3,8 +3,6 @@ Using AWS Parameter Store for Play Secret Rotation
 
 [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/)
 
-[![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/)
-
 There are three parts to this:
 
 * [Create the parameter](#create-the-aws-parameter-to-hold-the-secret) in AWS Parameter Store to hold the secret
@@ -39,8 +37,7 @@ to your Play version, and another specific to your AWS SDK version:
 
 * **Play** ... 
 [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/play-v30/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/play-v30/)
-* **AWS SDK** ([v1 or v2](https://docs.aws.amazon.com/sdk-for-java/latest/migration-guide/what-is-java-migration.html)) ... [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/)
-  [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v1/)
+* **AWS SDK** ([v2](https://docs.aws.amazon.com/sdk-for-java/latest/migration-guide/what-is-java-migration.html)) ... [![play-secret-rotation artifacts](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/latest-by-scala-version.svg)](https://index.scala-lang.org/guardian/play-secret-rotation/aws-parameterstore-sdk-v2/)
 
 So, for example:
 
