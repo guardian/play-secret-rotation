@@ -51,7 +51,7 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
 lazy val `secret-generator` = project.settings(baseSettings)
 
 val exactPlayVersions = Map(
-  "30" -> "org.playframework" %% "play" % "3.0.10"
+  "30" -> "org.playframework" %% "play" % "3.0.11"
 )
 
 def playVersion(majorMinorVersion: String)= {
