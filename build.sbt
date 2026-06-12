@@ -18,7 +18,7 @@ lazy val core =
     libraryDependencies ++= Seq(
       "com.github.blemale" %% "scaffeine" % "5.3.0",
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
-      "org.threeten" % "threeten-extra" % "1.8.0",
+      "org.threeten" % "threeten-extra" % "1.9.0",
       "org.scalatest" %% "scalatest" % "3.2.20" % Test,
     )
   )
