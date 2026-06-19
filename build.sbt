@@ -3,7 +3,7 @@ import sbtversionpolicy.withsbtrelease.ReleaseVersion.fromAggregatedAssessedComp
 
 lazy val baseSettings = Seq(
   scalaVersion := "2.13.18",
-  crossScalaVersions := Seq(scalaVersion.value, "3.3.7"),
+  crossScalaVersions := Seq(scalaVersion.value, "3.3.8"),
   organization := "com.gu.play-secret-rotation",
   licenses := Seq(License.Apache2),
   scalacOptions ++= Seq("-deprecation", "-unchecked", "-release:11"),
