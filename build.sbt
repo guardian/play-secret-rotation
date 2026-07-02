@@ -12,6 +12,7 @@ lazy val baseSettings = Seq(
 )
 
 val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.22.0"
+val jacksonDatabindOverride = "com.fasterxml.jackson.core" % "jackson-databind" % "2.22.0"
 
 lazy val core =
   project.settings(baseSettings).settings(
@@ -45,6 +46,7 @@ lazy val `aws-parameterstore-lambda` = project.in(file("aws-parameterstore/lambd
     "com.amazonaws" % "aws-lambda-java-events" % "3.16.1",
     awsSdkForVersion(2),
     jacksonOverride,
+    jacksonDatabindOverride,
   )
 )
 
@@ -61,6 +63,7 @@ def playVersion(majorMinorVersion: String)= {
     .settings(libraryDependencies ++= Seq(
       exactPlayVersions(majorMinorVersion),
       jacksonOverride,
+      jacksonDatabindOverride
     ))
 }
 
