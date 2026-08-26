@@ -12,7 +12,7 @@ lazy val baseSettings = Seq(
 )
 
 val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.22.2"
-val jacksonDatabindOverride = "com.fasterxml.jackson.core" % "jackson-databind" % "2.22.1"
+val jacksonDatabindOverride = "com.fasterxml.jackson.core" % "jackson-databind" % "2.22.2"
 
 lazy val core =
   project.settings(baseSettings).settings(
