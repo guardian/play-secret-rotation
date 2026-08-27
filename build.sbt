@@ -11,8 +11,8 @@ lazy val baseSettings = Seq(
     Tests.Argument(TestFrameworks.ScalaTest,"-u", s"test-results/scala-${scalaVersion.value}", "-o")
 )
 
-val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.22.1"
-val jacksonDatabindOverride = "com.fasterxml.jackson.core" % "jackson-databind" % "2.22.1"
+val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.22.2"
+val jacksonDatabindOverride = "com.fasterxml.jackson.core" % "jackson-databind" % "2.22.2"
 
 lazy val core =
   project.settings(baseSettings).settings(
