@@ -14,6 +14,9 @@ lazy val baseSettings = Seq(
 val jacksonOverride = "com.fasterxml.jackson.core" % "jackson-core" % "2.22.4"
 val jacksonDatabindOverride = "com.fasterxml.jackson.core" % "jackson-databind" % "2.22.3"
 
+// CVE-2026-102554: uncontrolled memory allocation during deserialisation.
+val guavaOverride = "com.google.guava" % "guava" % "33.7.2-jre"
+
 lazy val core =
   project.settings(baseSettings).settings(
     libraryDependencies ++= Seq(
@@ -63,7 +66,8 @@ def playVersion(majorMinorVersion: String)= {
     .settings(libraryDependencies ++= Seq(
       exactPlayVersions(majorMinorVersion),
       jacksonOverride,
-      jacksonDatabindOverride
+      jacksonDatabindOverride,
+      guavaOverride
     ))
 }
 
